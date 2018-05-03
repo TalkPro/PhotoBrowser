@@ -45,9 +45,9 @@ static const NSUInteger reusable_page_count = 3;
 @property (nonatomic, assign, readwrite) NSInteger numberOfPages;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 
-/// Images count >9, use this for indicate
+/// 使用indicatorType决定， PRIndicatorTypePageControl
 @property (nonatomic, strong) UILabel *indicatorLabel;
-/// Images count <=9, use this for indicate
+/// 使用indicatorType决定，PRIndicatorTypeLabel
 @property (nonatomic, strong) UIPageControl *indicatorPageControl;
 /// Hold the indicator control
 @property (nonatomic, weak) UIView *indicator;
@@ -179,12 +179,13 @@ static const NSUInteger reusable_page_count = 3;
     if (self.numberOfPages == 1) {
         return;
     }
-    if (self.numberOfPages <= 9) {
-        [self.view addSubview:self.indicatorPageControl];
-        self.indicator = self.indicatorPageControl;
-    } else {
+    if (self.indicatorType == PRIndicatorTypeLabel) {
         [self.view addSubview:self.indicatorLabel];
         self.indicator = self.indicatorLabel;
+    } else {
+        [self.view addSubview:self.indicatorPageControl];
+        self.indicator = self.indicatorPageControl;
+        
     }
     self.indicator.layer.zPosition = 1024;
 }
@@ -193,18 +194,18 @@ static const NSUInteger reusable_page_count = 3;
     if (!self.indicator) {
         return;
     }
-    if (self.numberOfPages <= 9) {
-        self.indicatorPageControl.numberOfPages = self.numberOfPages;
-        self.indicatorPageControl.currentPage = self.currentPage;
-        [self.indicatorPageControl sizeToFit];
-        self.indicatorPageControl.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2.0f,
-                                                       CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.indicatorPageControl.bounds) / 2.0f);
-    } else {
+    if (self.indicatorType == PRIndicatorTypeLabel) {
         NSString *indicatorText = [NSString stringWithFormat:@"%@/%@", @(self.currentPage + 1), @(self.numberOfPages)];
         self.indicatorLabel.text = indicatorText;
         [self.indicatorLabel sizeToFit];
         self.indicatorLabel.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2.0f,
                                                  CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.indicatorLabel.bounds));
+    } else {
+        self.indicatorPageControl.numberOfPages = self.numberOfPages;
+        self.indicatorPageControl.currentPage = self.currentPage;
+        [self.indicatorPageControl sizeToFit];
+        self.indicatorPageControl.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2.0f,
+                                                       CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.indicatorPageControl.bounds) / 2.0f);
     }
 }
 
@@ -534,6 +535,10 @@ static const NSUInteger reusable_page_count = 3;
 }
 
 - (void)_hideIndicator {
+    if (self.autoHiddenIndicator == NO) {
+        return;
+    }
+    
     if (!self.indicator || 0 == self.indicator.alpha) {
         return;
     }
@@ -544,6 +549,10 @@ static const NSUInteger reusable_page_count = 3;
 }
 
 - (void)_showIndicator {
+    if (self.autoHiddenIndicator == NO) {
+        return;
+    }
+    
     if (!self.indicator || 1 == self.indicator.alpha) {
         return;
     }
@@ -673,7 +682,7 @@ static const NSUInteger reusable_page_count = 3;
 - (UILabel *)indicatorLabel {
     if (!_indicatorLabel) {
         _indicatorLabel = [UILabel new];
-        _indicatorLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+        _indicatorLabel.font = [UIFont systemFontOfSize:14 weight:UIFontWeightRegular];
         _indicatorLabel.textAlignment = NSTextAlignmentCenter;
         _indicatorLabel.textColor = [UIColor whiteColor];
     }

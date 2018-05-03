@@ -26,6 +26,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, PRIndicatorType) {
+    PRIndicatorTypeLabel,
+    PRIndicatorTypePageControl,
+};
+
 @class PBViewController;
 
 #pragma mark - PBViewControllerDataSource
@@ -90,4 +95,9 @@
 @property (nonatomic, assign) BOOL hideThumb;
 /// Custom exit method, if did not provide, use dismiss.
 @property (nonatomic, copy, nullable) void (^exit)(PBViewController * _Nonnull sender);
+/// indicator 显示类型
+@property (nonatomic, assign) PRIndicatorType indicatorType;
+/// indicatorView 自动隐藏
+@property (nonatomic, assign) BOOL autoHiddenIndicator;
+
 @end
