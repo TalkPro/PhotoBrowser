@@ -26,7 +26,11 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol PBImageViewDelegate;
+@protocol PBImageViewDelegate <NSObject>
+
+-( UIImageView * _Nonnull )PBImageScrollViewWithCustomImgv;
+
+@end
 
 @interface PBImageScrollView : UIScrollView <UIScrollViewDelegate>
 
@@ -36,8 +40,4 @@
 
 @end
 
-@protocol PBImageViewDelegate <NSObject>
 
--( UIImageView * _Nonnull )PBImageScrollViewWithCustomImgv;
-
-@end
