@@ -199,7 +199,7 @@ static const NSUInteger reusable_page_count = 3;
         self.indicatorLabel.text = indicatorText;
         [self.indicatorLabel sizeToFit];
         self.indicatorLabel.center = CGPointMake(CGRectGetWidth(self.view.bounds) / 2.0f,
-                                                 CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.indicatorLabel.bounds));
+                                                 CGRectGetHeight(self.view.bounds) - CGRectGetHeight(self.indicatorLabel.bounds) - (([UIScreen mainScreen].bounds.size.height == 812) ? 34:0));
     } else {
         self.indicatorPageControl.numberOfPages = self.numberOfPages;
         self.indicatorPageControl.currentPage = self.currentPage;
