@@ -171,6 +171,9 @@ static const NSUInteger reusable_page_count = 3;
 - (void)_setCurrentPresentPageAnimated:(BOOL)animated {
     self.currentPage = 0 < self.currentPage && self.currentPage < self.numberOfPages ? self.currentPage : 0;
     PBImageScrollerViewController *firstImageScrollerViewController = [self _imageScrollerViewControllerForPage:self.currentPage];
+    if (!firstImageScrollerViewController) {
+        return;
+    }
     [self setViewControllers:@[firstImageScrollerViewController] direction:UIPageViewControllerNavigationDirectionForward animated:animated completion:nil];
 //    [firstImageScrollerViewController reloadData];
 }
